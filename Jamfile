@@ -1,0 +1,41 @@
+#
+#   jam
+#
+# Demo for pre-processing files
+# For example embedded SQL (aka esqlc)
+#
+
+INGRES_LIB = [ FDirName $(II_SYSTEM) ingres lib libingres$(SUFLIB) ] ;
+# Backwards compat note: Windows Ingres 2006 (9.1) and earlier was named "ingres.lib"
+
+# TODO for Unix
+# compile flags: $CCMACH $CCPICFLAG
+# linker flags: $CCMACH and $LDLIBMACH
+
+
+rule UserObject
+{
+    switch $(2:S)
+    {
+        case .sc    :   Cc $(1) : $(1:S=.c) ;
+                        IngresEsqlPreProcess $(1:S=.c) : $(2) ;
+        case *      :   ECHO "unknown suffix on" $(2) ;
+    }
+}
+
+rule IngresEsqlPreProcess
+{
+    DEPENDS $(1) : $(2) ;
+    # Clean generate C and compiled object code
+    Clean clean : $(1) $(2:S=$(SUFOBJ)) ;
+}
+
+actions IngresEsqlPreProcess
+{
+    esqlc $(2)
+}
+
+Main watchrepev : watchrepev.sc ;
+# Move LinkLibraries dependency on Ingres lib into UserObject?
+LinkLibraries watchrepev : $(INGRES_LIB) ;
+
