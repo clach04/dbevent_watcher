@@ -35,7 +35,7 @@ actions IngresEsqlPreProcess
     esqlc $(2)
 }
 
-Main watchrepev : watchrepev.sc ;
+Main dbevent_watcher : dbevent_watcher.sc ;
 # Move LinkLibraries dependency on Ingres lib into UserObject?
-LinkLibraries watchrepev : $(INGRES_LIB) ;
+LinkLibraries dbevent_watcher : $(INGRES_LIB) ;
 
