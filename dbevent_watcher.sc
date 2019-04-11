@@ -35,7 +35,7 @@ int main(int argc,char *argv[])
   EXEC SQL set_sql (savequery=1);
   EXEC sql declare cs cursor for 
      select distinct 'register dbevent ' + squeeze(event_name) 
-       from iievents where lowercase(event_name) like 'dd\_%' escape '\';
+       from iievents;
   EXEC SQL open cs for readonly;
   while(1)
   { 
@@ -67,7 +67,7 @@ int main(int argc,char *argv[])
     fprintf(stderr,"It isn\'t, so please stop with ^C\n");
   }
   else fprintf(stderr,"Stop this program by raising event \"stopwatch\"\n");
-  fprintf(stderr,"Waiting for replicator dbevents...\n");
+  fprintf(stderr,"Waiting for dbevents...\n");
   while(1)
   {
     EXEC SQL get dbevent with wait;
